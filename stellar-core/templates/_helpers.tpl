@@ -78,9 +78,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   valueFrom:
     secretKeyRef:
       name: {{ template "stellar-core.postgresql.fullname" . }}
-      key: postgres-password
+      key: postgresql-password
 - name: DATABASE
-  value: postgresql://dbname={{ .Values.postgresql.postgresDatabase }} user={{ .Values.postgresql.postgresUser }} password=$(DATABASE_PASSWORD) host={{ template "stellar-core.postgresql.fullname" . }} connect_timeout={{ .Values.postgresqlConnectTimeout }}
+  value: postgresql://dbname={{ .Values.postgresql.postgresqlDatabase }} user={{ .Values.postgresql.postgresqlUsername }} password=$(DATABASE_PASSWORD) host={{ template "stellar-core.postgresql.fullname" . }} connect_timeout={{ .Values.postgresqlConnectTimeout }}
 {{- else }}
 {{- with .Values.existingDatabase.passwordSecret }}
 - name: DATABASE_PASSWORD

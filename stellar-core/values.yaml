@@ -64,10 +64,10 @@ environment: {}
 
 postgresql:
   enabled: true
-  postgresDatabase: stellar-core
-  postgresUser: postgres
+  postgresqlDatabase: stellar-core
+  postgresqlUsername: postgres
   # options from https://github.com/helm/charts/tree/master/stable/postgresql
-  # postgresPassword:
+  # postgresqlPassword:
 
 postgresqlConnectTimeout: 5
 
