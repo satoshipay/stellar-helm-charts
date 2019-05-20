@@ -1,0 +1,72 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "stellar-horizon.fullname" . }}
+  labels:
+    app: {{ template "stellar-horizon.name" . }}
+    chart: {{ template "stellar-horizon.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ template "stellar-horizon.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "stellar-horizon.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: "{{ template "stellar-horizon.serviceAccountName" . }}"
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            {{ include "stellar-horizon.env" . | indent 12 }}
+            {{- if .Values.ingest }}
+            - name: INGEST
+              value: "true"
+            {{- end }}
+            {{- if .Values.ingestFailedTransactions }}
+            - name: INGEST_FAILED_TRANSACTIONS
+              value: "true"
+            {{- end }}
+            {{- if .Values.enableAssetStats }}
+            - name: ENABLE_ASSET_STATS
+              value: "true"
+            {{- end }}
+            {{- range $key, $val := .Values.environment }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            timeoutSeconds: 5
+            exec:
+              command: [ /ready.sh ]
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

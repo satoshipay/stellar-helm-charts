@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "stellar-core.fullname" . }}
+  labels:
+    app: {{ template "stellar-core.name" . }}
+    chart: {{ template "stellar-core.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ template "stellar-core.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "stellar-core.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: "{{ template "stellar-core.serviceAccountName" . }}"
+
+      initContainers:
+        {{- if .Values.forceScp }}
+        - name: {{ .Chart.Name }}-forcescp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ with .Values.image.flavor }}-{{.}}{{ end }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["stellar-core", "--conf", "/stellar-core.cfg", "force-scp"]
+          env:
+            {{ include "stellar-core.env" . | indent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              subPath: {{ .Values.persistence.subPath }}
+        {{- end }}
+        {{- if .Values.initCatchup.enabled }}
+        - name: {{ .Chart.Name }}-catchup
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ with .Values.image.flavor }}-{{.}}{{ end }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["stellar-core", "--conf", "/stellar-core.cfg", "--catchup-to", '{{ printf "%.0f" .Values.initCatchup.ledger }}']
+          env:
+            {{ include "stellar-core.env" . | indent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              subPath: {{ .Values.persistence.subPath }}
+        {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ with .Values.image.flavor }}-{{.}}{{ end }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: peer
+              containerPort: 11625
+              protocol: TCP
+            - name: http
+              containerPort: 11626
+              protocol: TCP
+          env:
+            {{ include "stellar-core.env" . | indent 12 }}
+          livenessProbe:
+            tcpSocket:
+              port: peer
+          readinessProbe:
+            tcpSocket:
+              port: peer
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: {{ .Values.persistence.mountPath }}
+              subPath: {{ .Values.persistence.subPath }}
+      volumes:
+      - name: data
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default (include "stellar-core.fullname" .) }}
+      {{- else }}
+        emptyDir: {}
+      {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

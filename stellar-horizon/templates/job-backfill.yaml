@@ -1,0 +1,30 @@
+{{- if not (eq .Values.backfill "0") }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "stellar-horizon.fullname" . }}-backfill
+  labels:
+    app: {{ template "stellar-horizon.name" . }}
+    chart: {{ template "stellar-horizon.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      name: horizon-backfill
+      labels:
+        app: {{ template "stellar-horizon.name" . }}
+        chart: {{ template "stellar-horizon.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      containers:
+      - name: horizon-backfill
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: ["horizon", "db", "backfill", "{{ .Values.backfill }}"]
+        env:
+          {{ include "stellar-horizon.env" . | indent 10 }}
+      # Do not restart containers after they exit
+      restartPolicy: Never
+{{- end }}

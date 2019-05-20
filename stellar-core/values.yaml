@@ -1,0 +1,139 @@
+## NOTE:
+## You have to provide a node seed
+##   * either by specifying nodeSeed directly
+##   * or by specifying existingNodeSeedSecret that points to an existing secret
+## You can generate a node seed by running the following command:
+##   docker run --rm -it --entrypoint '' satoshipay/stellar-core stellar-core --genseed
+
+## WARNING: make sure to replace this in your configuration or use existingNodeSeedSecret
+nodeSeed: SDUFQA7YL3KTWZNKOXX7XXIYU4R5R6JKELMREKHDQOYY2WPUGXFVJN52
+# existingNodeSeedSecret:
+#   name: stellar-core
+#   key: nodeSeed
+
+nodeIsValidator: true
+
+networkPassphrase: Public Global Stellar Network ; September 2015
+
+catchupComplete: false
+catchupRecent: 0
+
+# targetPeerConnections: 8
+# maxAdditionalPeerConnections: 50
+# maxPendingConnections: 500
+maxConcurrentSubprocesses: 2
+
+knownPeers: []
+
+preferredPeers: []
+
+nodeNames: []
+
+unsafeQuorum: false
+
+quorumSet: {}
+  # - threshold_percent: 66
+  #   validators:
+  #     - $$eno
+  #     - $$keybase0
+  #     - $$tempo
+  #     - $$umbrel
+  # - path: satoshipay
+  #   threshold_percent: 51
+  #   validators:
+  #     - $$satoshipay1
+  #     - $$satoshipay2
+  #     - $$satoshipay3
+
+history: {}
+  # sdf1:
+  #   get: "curl -sf http://history.stellar.org/prd/core-live/core_live_001/{0} -o {1}"
+  # sdf2:
+  #   get: "curl -sf http://history.stellar.org/prd/core-live/core_live_002/{0} -o {1}"
+  # sdf3:
+  #   get: "curl -sf http://history.stellar.org/prd/core-live/core_live_003/{0} -o {1}"
+
+initializeDatabase: true
+initializeHistoryArchives: false
+
+initCatchup:
+  enabled: false
+  ledger: 21000000
+
+environment: {}
+
+postgresql:
+  enabled: true
+  postgresDatabase: stellar-core
+  postgresUser: postgres
+  # options from https://github.com/helm/charts/tree/master/stable/postgresql
+  # postgresPassword:
+
+postgresqlConnectTimeout: 5
+
+## NOTE:
+## existingDatabase is only used if postgresql.enabled is false
+existingDatabase:
+  passwordSecret:
+    name: postgresql-core
+    key: password
+  ## NOTE:
+  ## $(DATABASE_PASSWORD) is automatically replaced with the value of the passwordSecret
+  # url: postgresql://dbname=stellar-core host=postgresql-core password=$(DATABASE_PASSWORD)
+
+image:
+  repository: satoshipay/stellar-core
+  tag: '11.0.0'
+  # flavor: aws
+  # flavor: gcloud
+  pullPolicy: IfNotPresent
+
+peerService:
+  type: LoadBalancer
+  port: 11625
+  # loadBalancerIP: 35.13.37.42
+  # externalTrafficPolicy: Local
+
+httpService:
+  type: ClusterIP
+  port: 11626
+
+persistence:
+  enabled: true
+
+  ## A manually managed Persistent Volume and Claim
+  ## Requires persistence.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  # existingClaim:
+
+  ## database data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 8Gi
+
+  subPath: "stellar-core"
+  mountPath: /data
+
+  ## Annotations for the persistent volume claim
+  # annotations:
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+serviceAccount:
+  create: true
+  name:

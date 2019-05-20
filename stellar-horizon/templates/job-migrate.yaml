@@ -1,0 +1,30 @@
+{{- if .Values.migrate }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "stellar-horizon.fullname" . }}-migrate
+  labels:
+    app: {{ template "stellar-horizon.name" . }}
+    chart: {{ template "stellar-horizon.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      name: horizon-migrate
+      labels:
+        app: {{ template "stellar-horizon.name" . }}
+        chart: {{ template "stellar-horizon.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      containers:
+      - name: horizon-migrate
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args: ["horizon", "db", "migrate", "up"]
+        env:
+          {{ include "stellar-horizon.env" . | indent 10 }}
+      # Do not restart containers after they exit
+      restartPolicy: Never
+{{- end }}
