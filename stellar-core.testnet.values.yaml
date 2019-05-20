@@ -1,0 +1,52 @@
+nodeSeed: SCS7PF3YQJ7EUCYCQLXTALHKEUL7MEZWSSDUDV3BQHGSTOJSHOHV4UN3
+nodeIsValidator: true
+networkPassphrase: Test SDF Network ; September 2015
+knownPeers:
+  - core-testnet1.stellar.org
+  - core-testnet2.stellar.org
+  - core-testnet3.stellar.org
+  - stellar-testnet-de-fra.satoshipay.io
+
+nodeNames:
+  - name: sdf-testnet1
+    publicKey: GDKXE2OZMJIPOSLNA6N6F2BVCI3O777I2OOC4BV7VOYUEHYX7RTRYA7Y
+  - name: sdf-testnet2
+    publicKey: GCUCJTIYXSOXKBSNFGNFWW5MUQ54HKRPGJUTQFJ5RQXZXNOLNXYDHRAP
+  - name: sdf-testnet3
+    publicKey: GC2V2EFSXN6SQTWVYA5EPJPBWWIMSD2XQNKUOHGEKB535AQE2I6IXV2Z
+  - name: satoshipay-testnet-de-fra
+    publicKey: GBQP2WQZTCNUDUOR5W6XJ2BPLDV2KZSZFJ5AZUHUBLU63ZKS2OP7CMUO
+
+preferredPeerKeys:
+  - $sdf-testnet1
+  - $sdf-testnet2
+  - $sdf-testnet3
+  - $satoshipay-testnet-de-fra
+
+quorumSet:
+  - threshold_percent: 66
+    validators:
+      - $sdf-testnet1
+      - $sdf-testnet2
+      - $sdf-testnet3
+      - $satoshipay-testnet-de-fra
+
+history:
+  sdf-testnet1:
+    get: "curl -sf https://history.stellar.org/prd/core-testnet/core_testnet_001/{0} -o {1}"
+  sdf-testnet2:
+    get: "curl -sf https://history.stellar.org/prd/core-testnet/core_testnet_002/{0} -o {1}"
+  sdf-testnet3:
+    get: "curl -sf https://history.stellar.org/prd/core-testnet/core_testnet_003/{0} -o {1}"
+  satoshipay-testnet-de-fra:
+    get: "curl -sf https://stellar-history-testnet-de-fra.satoshipay.io/{0} -o {1}"
+
+initializeDatabase: true
+
+persistence:
+  size: 8Gi
+
+postgresql:
+  enabled: true
+  persistence:
+    size: 20Gi
