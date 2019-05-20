@@ -1,0 +1,21 @@
+networkPassphrase: Test SDF Network ; September 2015
+
+stellar-core:
+  enabled: false
+
+existingStellarCore:
+  url: http://stellar-core-http:11626
+  databaseUrl: postgres://postgres:$(STELLAR_CORE_DATABASE_PASSWORD)@stellar-core-postgresql/stellar-core?sslmode=disable
+  databasePasswordSecret:
+    name: stellar-core-postgresql
+    key: postgresql-password
+
+ingress:
+  enabled: true
+  hosts:
+    - name: stellar-horizon.d00d3.net
+      # tls: true
+      # tlsSecret: owncloud
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        # certmanager.k8s.io/cluster-issuer: letsencrypt-production
