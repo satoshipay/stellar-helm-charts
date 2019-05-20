@@ -1,8 +1,8 @@
 postgresql:
   enabled: true
-  nameOverride: postgresql-horizon
-  postgresDatabase: stellar-horizon
-  postgresUser: postgres
+  # nameOverride: postgresql-horizon
+  postgresqlDatabase: stellar-horizon
+  postgresqlUsername: postgres
   # options from https://github.com/helm/charts/tree/master/stable/postgresql
   # postgresPassword:
 
@@ -27,10 +27,10 @@ stellar-core:
 ## existingStellarCore is only used if stellar-core.enabled is false
 existingStellarCore:
   url: http://stellar-core:11626
-  databaseUrl: postgres://postgres:$(DATABASE_PASSWORD)@postgresql-core/stellar-core?sslmode=disable
+  databaseUrl: postgres://postgres:$(STELLAR_CORE_DATABASE_PASSWORD)@stellar-core-postgresql/stellar-core?sslmode=disable
   databasePasswordSecret:
-    name: postgresql-core
-    key: password
+    name: stellar-core-postgresql
+    key: postgresql-password
 
 ingest: true
 ingestFailedTransactions: true

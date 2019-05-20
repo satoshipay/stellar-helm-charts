@@ -101,9 +101,9 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   valueFrom:
     secretKeyRef:
       name: {{ template "stellar-horizon.postgresql.fullname" . }}
-      key: postgres-password
+      key: postgresql-password
 - name: DATABASE_URL
-  value: postgres://{{ .Values.postgresql.postgresUser }}:$(DATABASE_PASSWORD)@{{ template "stellar-horizon.postgresql.fullname" . }}/{{ .Values.postgresql.postgresDatabase }}?sslmode=disable
+  value: postgres://{{ .Values.postgresql.postgresqlUsername }}:$(DATABASE_PASSWORD)@{{ template "stellar-horizon.postgresql.fullname" . }}/{{ .Values.postgresql.postgresqlDatabase }}?sslmode=disable
 {{- else }}
 {{- with .Values.existingDatabase.passwordSecret }}
 - name: DATABASE_PASSWORD
@@ -122,7 +122,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
   valueFrom:
     secretKeyRef:
       name: {{ template "stellar-horizon.stellar-core.postgresql.fullname" . }}
-      key: postgres-password
+      key: postgresql-password
 - name: STELLAR_CORE_DATABASE_URL
   value: postgres://postgres:$(STELLAR_CORE_DATABASE_PASSWORD)@{{ template "stellar-horizon.stellar-core.postgresql.fullname" . }}/stellar-core?sslmode=disable
 {{- else }}
