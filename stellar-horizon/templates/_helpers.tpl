@@ -105,12 +105,20 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 - name: DATABASE_URL
   value: postgres://{{ .Values.postgresql.postgresqlUsername }}:$(DATABASE_PASSWORD)@{{ template "stellar-horizon.postgresql.fullname" . }}/{{ .Values.postgresql.postgresqlDatabase }}?sslmode=disable
 {{- else }}
+{{- if .Values.existingDatabase.password }}
+- name: DATABASE_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ template "stellar-horizon.fullname" . }}
+      key: databasePassword
+{{- else }}
 {{- with .Values.existingDatabase.passwordSecret }}
 - name: DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ .name | quote }}
       key: {{ .key | quote }}
+{{- end }}
 {{- end }}
 - name: DATABASE_URL
   value: {{ .Values.existingDatabase.url }}

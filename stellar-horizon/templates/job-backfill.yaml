@@ -1,4 +1,4 @@
-{{- if (.Values.backfill) and not (eq .Values.backfill 0) }}
+{{- if (.Values.backfill) and not (eq .Values.backfill "0") }}
 apiVersion: batch/v1
 kind: Job
 metadata:
