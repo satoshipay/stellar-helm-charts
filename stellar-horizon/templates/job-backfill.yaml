@@ -1,4 +1,4 @@
-{{- if (.Values.backfill) and not (eq .Values.backfill "0") }}
+{{- if and .Values.backfill  (not (eq .Values.backfill "0")) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -22,7 +22,7 @@ spec:
       - name: horizon-backfill
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: ["horizon", "db", "backfill", "{{ .Values.backfill }}"]
+        args: ["horizon", "db", "backfill", {{ .Values.backfill | quote }}]
         env:
           {{ include "stellar-horizon.env" . | indent 10 }}
       # Do not restart containers after they exit
