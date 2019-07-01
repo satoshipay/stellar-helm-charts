@@ -28,7 +28,7 @@ spec:
         - name: {{ .Chart.Name }}-forcescp
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ with .Values.image.flavor }}-{{.}}{{ end }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["stellar-core", "--conf", "/stellar-core.cfg", "force-scp"]
+          args: ["stellar-core", "force-scp", "--conf", "/stellar-core.cfg"]
           env:
             {{ include "stellar-core.env" . | indent 12 }}
           volumeMounts:
@@ -40,7 +40,7 @@ spec:
         - name: {{ .Chart.Name }}-catchup
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}{{ with .Values.image.flavor }}-{{.}}{{ end }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: ["stellar-core", "--conf", "/stellar-core.cfg", "--catchup-to", '{{ printf "%.0f" .Values.initCatchup.ledger }}']
+          args: ["stellar-core", "catchup", '{{ printf "%.0f" .Values.initCatchup.ledger }}', "--conf", "/stellar-core.cfg"]
           env:
             {{ include "stellar-core.env" . | indent 12 }}
           volumeMounts:
