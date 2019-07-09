@@ -73,6 +73,28 @@ spec:
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
               subPath: {{ .Values.persistence.subPath }}
+      {{- if .Values.metrics.enabled }}
+        - name: metrics
+          image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          env:
+            - name: STELLAR_CORE_ADDRESS
+              value: "http://127.0.0.1:11626"
+            - name: PORT
+              value: "9473"
+          ports:
+            - name: metrics
+              containerPort: 9473
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+      {{- end }}
       volumes:
       - name: data
       {{- if .Values.persistence.enabled }}

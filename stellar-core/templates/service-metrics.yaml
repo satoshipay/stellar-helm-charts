@@ -1,0 +1,26 @@
+{{- if .Values.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "stellar-core.fullname" . }}-metrics
+  labels:
+    app: {{ template "stellar-core.name" . }}
+    chart: {{ template "stellar-core.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+{{ toYaml .Values.metrics.service.annotations | indent 4 }}
+spec:
+  type: {{ .Values.metrics.service.type }}
+  ports:
+    - port: {{ .Values.metrics.service.port }}
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
+  {{- with .Values.metrics.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  selector:
+    app: {{ template "stellar-core.name" . }}
+    release: {{ .Release.Name }}
+{{- end }}
