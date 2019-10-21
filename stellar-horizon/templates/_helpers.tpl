@@ -96,6 +96,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "stellar-horizon.env" -}}
+{{- if .Values.perHourRateLimit }}
+- name: PER_HOUR_RATE_LIMIT
+  value: {{ .Values.perHourRateLimit | quote }}
+{{- end }}
 {{- if .Values.postgresql.enabled }}
 - name: DATABASE_PASSWORD
   valueFrom:
