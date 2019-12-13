@@ -10,11 +10,13 @@ horizonUrl: https://horizon-testnet.stellar.org
 
 startingBalance: 10000
 
+numMinions: 1000
+
 environment: {}
 
 image:
   repository: satoshipay/stellar-friendbot
-  tag: '0.13.0'
+  tag: '0.0.2'
   pullPolicy: IfNotPresent
 
 service:
