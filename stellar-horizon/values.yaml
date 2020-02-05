@@ -44,7 +44,7 @@ environment: {}
 
 image:
   repository: satoshipay/stellar-horizon
-  tag: '0.24.0'
+  tag: '0.24.1'
   pullPolicy: IfNotPresent
 
 service:
