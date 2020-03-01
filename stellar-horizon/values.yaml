@@ -39,6 +39,7 @@ enableAssetStats: false
 backfill: "0"
 migrate: false
 networkPassphrase: Public Global Stellar Network ; September 2015
+perHourRateLimit:
 
 environment: {}
 
