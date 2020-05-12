@@ -83,7 +83,7 @@ existingDatabase:
 
 image:
   repository: satoshipay/stellar-core
-  tag: '12.5.0'
+  tag: '13.0.0-1'
   # flavor: aws
   # flavor: gcloud
   pullPolicy: IfNotPresent
@@ -110,8 +110,9 @@ metrics:
     loadBalancerIP:
   image:
     repository: stellar/stellar-core-prometheus-exporter
+    # Note: use proper tag when upstream uses proper tags
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
 
 persistence:
   enabled: true
