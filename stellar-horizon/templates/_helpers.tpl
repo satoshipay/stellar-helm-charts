@@ -150,4 +150,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 - name: NETWORK_PASSPHRASE
   value: {{ . | quote }}
 {{- end }}
+{{- with .Values.historyArchiveUrls }}
+- name: HISTORY_ARCHIVE_URLS
+  value: {{ join "," . }}
+{{- end }}
 {{- end -}}
