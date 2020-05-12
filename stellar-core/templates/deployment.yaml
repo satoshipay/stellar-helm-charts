@@ -87,10 +87,14 @@ spec:
               containerPort: 9473
               protocol: TCP
           readinessProbe:
+            timeoutSeconds: 5
+            initialDelaySeconds: 20
             httpGet:
               path: /
               port: metrics
           livenessProbe:
+            timeoutSeconds: 5
+            initialDelaySeconds: 20
             httpGet:
               path: /
               port: metrics
