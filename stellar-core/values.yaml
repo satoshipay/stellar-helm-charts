@@ -83,7 +83,7 @@ existingDatabase:
 
 image:
   repository: satoshipay/stellar-core
-  tag: '13.0.0-1'
+  tag: '13.1.0'
   # flavor: aws
   # flavor: gcloud
   pullPolicy: IfNotPresent
