@@ -39,6 +39,7 @@ enableAssetStats: false
 backfill: "0"
 migrate: false
 networkPassphrase: Public Global Stellar Network ; September 2015
+connectionTimeout: 60
 historyArchiveUrls: []
   #- https://stellar-history-de-fra.satoshipay.io/
   #- https://stellar-history-sg-sin.satoshipay.io/
@@ -51,7 +52,7 @@ environment: {}
 
 image:
   repository: satoshipay/stellar-horizon
-  tag: '1.6.0'
+  tag: '1.7.0'
   pullPolicy: IfNotPresent
 
 service:
