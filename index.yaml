@@ -3,14 +3,14 @@ entries:
   stellar-core:
   - apiVersion: v1
     appVersion: 11.0.0
-    created: "2021-03-17T16:10:47.307399469+01:00"
+    created: "2021-03-18T16:21:38.121363074+01:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
       repository: '@stable'
       version: ^5.0.0
     description: Backbone node of the Stellar cryptocurrency network.
-    digest: 0204febffbeb450855ff0c1ce5fb7cb8185025eb74bd02993d07d70cb709774f
+    digest: 7615fd9d56167e91e534701e70c2c7d33bc481980b23e21767188984d1702c83
     home: https://www.stellar.org
     icon: https://www.stellar.org/developers/images/favicon/rocket-180x180.png
     keywords:
@@ -33,10 +33,10 @@ entries:
   stellar-friendbot:
   - apiVersion: v1
     appVersion: 0.13.0
-    created: "2021-03-17T16:10:47.30767975+01:00"
+    created: "2021-03-18T16:21:38.121657324+01:00"
     description: Friendbot that sends money in the Stellar cryptocurrency (testnet)
       network.
-    digest: dedcb7809977ebbd9617649b6571e6fb41c7896d5cd43eefd797424b552b22a6
+    digest: 0578aeca03ee243d9a08ef2942a8ef66918b9f93a41b0a089e5eb02167a4957e
     home: https://www.stellar.org
     icon: https://www.stellar.org/developers/images/favicon/rocket-180x180.png
     keywords:
@@ -53,12 +53,12 @@ entries:
     sources:
     - https://github.com/satoshipay/docker-stellar-friendbot/
     urls:
-    - https://satoshipay.github.io/stellar-helm-charts/stellar-friendbot-1.0.0.tgz
-    version: 1.0.0
+    - https://satoshipay.github.io/stellar-helm-charts/stellar-friendbot-1.1.0.tgz
+    version: 1.1.0
   stellar-horizon:
   - apiVersion: v1
     appVersion: 0.17.6
-    created: "2021-03-17T16:10:47.311254747+01:00"
+    created: "2021-03-18T16:21:38.124294805+01:00"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -69,7 +69,7 @@ entries:
       repository: file://../stellar-core/
       version: ^1.0.0
     description: Client-facing API server for the Stellar cryptocurrency network.
-    digest: 19a78dbf58d5012571e359add3d1f0c91e0f849216bfd2fa270ab87558740f7a
+    digest: e887f18f5d75e41f0cefe63030c9798f0c2412c76df523a52a0be30629fa74e6
     home: https://www.stellar.org
     icon: https://www.stellar.org/developers/images/favicon/rocket-180x180.png
     keywords:
@@ -85,6 +85,6 @@ entries:
     sources:
     - https://github.com/satoshipay/docker-stellar-horizon/
     urls:
-    - https://satoshipay.github.io/stellar-helm-charts/stellar-horizon-1.0.0.tgz
-    version: 1.0.0
-generated: "2021-03-17T16:10:47.305764016+01:00"
+    - https://satoshipay.github.io/stellar-helm-charts/stellar-horizon-1.1.0.tgz
+    version: 1.1.0
+generated: "2021-03-18T16:21:38.120046513+01:00"
