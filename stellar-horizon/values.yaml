@@ -71,7 +71,7 @@ ingress:
     ## Set this to true in order to enable TLS on the ingress record
     tls: false
 
-    ## If TLS is set to true, you must declare what secret will store the key/certificate for TLS
+    ## If TLS is set to true, you probably need to declare what secret will store the key/certificate for TLS
     tlsSecret: stellar-horizon.local-tls
 
     ## Ingress annotations done as key:value pairs
